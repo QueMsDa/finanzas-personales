@@ -1,0 +1,17 @@
+# Credenciales — NUNCA subir
+android/local.properties
+
+# Android build
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aab
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Google Apps Script local
+sheets/*.json

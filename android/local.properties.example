@@ -1,0 +1,8 @@
+## Copia este archivo como "local.properties" (sin el .example)
+## y rellena con tus valores de Supabase
+## ¡NUNCA subas local.properties a git!
+
+sdk.dir=C\:\\Users\\kggp\\AppData\\Local\\Android\\Sdk
+
+SUPABASE_URL=https://abcdefghij.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...tu_clave_aqui
