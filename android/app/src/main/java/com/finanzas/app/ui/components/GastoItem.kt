@@ -92,6 +92,16 @@ fun GastoItem(
                         color = Color(0xFF6B27E8)
                     )
                 }
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    if (gasto.esCompartido) {
+                        Text("💚 Compartido", style = MaterialTheme.typography.labelSmall, color = Color(0xFF2E7D32))
+                    } else {
+                        Text("🔵 Personal", style = MaterialTheme.typography.labelSmall, color = Color(0xFF1565C0))
+                    }
+                    gasto.autor?.let {
+                        Text("· $it", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
             }
 
             Column(horizontalAlignment = Alignment.End) {

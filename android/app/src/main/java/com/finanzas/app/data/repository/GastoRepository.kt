@@ -4,6 +4,7 @@ import com.finanzas.app.data.SupabaseConfig
 import com.finanzas.app.data.models.Categoria
 import com.finanzas.app.data.models.Gasto
 import com.finanzas.app.data.models.GastoConCategoria
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
@@ -18,6 +19,8 @@ class GastoRepository {
 
     private val client = SupabaseConfig.client
 
+    fun currentUserId(): String? = client.auth.currentUserOrNull()?.id
+
     suspend fun getCategorias(): List<Categoria> =
         client.from("categorias").select().decodeList()
 
@@ -26,7 +29,7 @@ class GastoRepository {
         val desde = ym.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE)
         val hasta = ym.atEndOfMonth().format(DateTimeFormatter.ISO_LOCAL_DATE)
         return client.from("gastos")
-            .select(Columns.raw("*, categorias(*)")) {
+            .select(Columns.raw("*, categorias(*), profiles(id, nombre)")) {
                 filter {
                     gte("fecha", desde)
                     lte("fecha", "${hasta}T23:59:59")
@@ -38,17 +41,15 @@ class GastoRepository {
 
     suspend fun getTodosLosGastos(): List<GastoConCategoria> =
         client.from("gastos")
-            .select(Columns.raw("*, categorias(*)")) {
+            .select(Columns.raw("*, categorias(*), profiles(id, nombre)")) {
                 order("fecha", Order.DESCENDING)
             }
             .decodeList()
 
-    suspend fun insertGasto(gasto: Gasto): GastoConCategoria =
-        client.from("gastos")
-            .insert(gasto) {
-                select(Columns.raw("*, categorias(*)"))
-            }
-            .decodeSingle()
+    suspend fun insertGasto(gasto: Gasto) {
+        val conUserId = gasto.copy(userId = currentUserId())
+        client.from("gastos").insert(conUserId)
+    }
 
     suspend fun deleteGasto(id: Long) {
         client.from("gastos").delete {

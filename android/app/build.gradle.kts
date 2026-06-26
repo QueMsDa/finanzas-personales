@@ -14,12 +14,12 @@ val localProps = Properties().apply {
 
 android {
     namespace  = "com.finanzas.app"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId   = "com.finanzas.app"
         minSdk          = 26
-        targetSdk       = 35
+        targetSdk       = 34
         versionCode     = 1
         versionName     = "1.0"
 
@@ -67,6 +67,7 @@ dependencies {
 
     implementation(libs.supabase.postgrest)
     implementation(libs.supabase.realtime)
+    implementation(libs.supabase.auth)
     implementation(libs.ktor.client.android)
 
     implementation(libs.mlkit.text.recognition)

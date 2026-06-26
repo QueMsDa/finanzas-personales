@@ -96,6 +96,21 @@ fun AgregarGastoScreen(
                 }
             }
 
+            // ── Tipo: Personal / Compartido ───────────────────────────────
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                listOf("personal" to "🔵 Personal", "compartido" to "💚 Compartido").forEach { (valor, label) ->
+                    FilterChip(
+                        selected = state.tipo == valor,
+                        onClick  = { vm.setTipo(valor) },
+                        label    = { Text(label) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
             // ── Descripción ────────────────────────────────────────────────
             OutlinedTextField(
                 value         = state.descripcion,

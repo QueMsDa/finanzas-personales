@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -23,7 +24,10 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(vm: DashboardViewModel = viewModel()) {
+fun DashboardScreen(
+    vm: DashboardViewModel = viewModel(),
+    onLogout: () -> Unit = {}
+) {
     val state by vm.state.collectAsState()
 
     val mesNombre = LocalDate.now()
@@ -37,6 +41,9 @@ fun DashboardScreen(vm: DashboardViewModel = viewModel()) {
                 actions = {
                     IconButton(onClick = { vm.cargarDatos() }) {
                         Icon(Icons.Default.Refresh, "Actualizar")
+                    }
+                    IconButton(onClick = onLogout) {
+                        Icon(Icons.Default.Logout, "Cerrar sesión")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

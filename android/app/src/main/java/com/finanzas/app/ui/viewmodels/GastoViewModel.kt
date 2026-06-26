@@ -19,6 +19,7 @@ data class AgregarState(
     val monto: String = "",
     val categoriaId: Long = 0,
     val descripcion: String = "",
+    val tipo: String = "personal",
     val categorias: List<Categoria> = emptyList(),
     val isSaving: Boolean = false,
     val saved: Boolean = false,
@@ -92,6 +93,7 @@ class GastoViewModel : ViewModel() {
     fun setMonto(v: String)       = _agregarState.update { it.copy(monto = v) }
     fun setCategoria(id: Long)    = _agregarState.update { it.copy(categoriaId = id) }
     fun setDescripcion(v: String) = _agregarState.update { it.copy(descripcion = v) }
+    fun setTipo(v: String)        = _agregarState.update { it.copy(tipo = v) }
 
     fun guardarGasto() {
         val s = _agregarState.value
@@ -109,7 +111,8 @@ class GastoViewModel : ViewModel() {
                         categoriaId = s.categoriaId,
                         descripcion = s.descripcion.ifBlank { null },
                         fecha       = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                        fuente      = "manual"
+                        fuente      = "manual",
+                        tipo        = s.tipo
                     )
                 )
                 _agregarState.update { AgregarState(categorias = it.categorias, categoriaId = it.categoriaId) }

@@ -18,19 +18,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.finanzas.app.ui.screens.*
+import com.finanzas.app.ui.viewmodels.AuthViewModel
 import com.finanzas.app.ui.viewmodels.DashboardViewModel
 import com.finanzas.app.ui.viewmodels.GastoViewModel
+import io.github.jan.supabase.auth.status.SessionStatus
 
 sealed class Screen(val route: String, val label: String, val icon: ImageVector) {
-    object Dashboard : Screen("dashboard", "Inicio",     Icons.Default.Home)
-    object Agregar   : Screen("agregar",   "Agregar",    Icons.Default.Add)
-    object Yape      : Screen("yape",      "Yape",       Icons.Default.PhoneIphone)
-    object Historial : Screen("historial", "Historial",  Icons.Default.List)
+    object Dashboard : Screen("dashboard", "Inicio",    Icons.Default.Home)
+    object Agregar   : Screen("agregar",   "Agregar",   Icons.Default.Add)
+    object Yape      : Screen("yape",      "Yape",      Icons.Default.PhoneIphone)
+    object Historial : Screen("historial", "Historial", Icons.Default.List)
 }
 
 @Composable
 fun FinanzasNavGraph() {
-    val navController    = rememberNavController()
+    val authVm: AuthViewModel = viewModel()
+    val sessionStatus by authVm.sessionStatus.collectAsState()
+
+    when (sessionStatus) {
+        is SessionStatus.Authenticated -> MainApp(authVm = authVm)
+        else                           -> LoginScreen(authVm = authVm)
+    }
+}
+
+@Composable
+private fun MainApp(authVm: AuthViewModel) {
+    val navController = rememberNavController()
     val dashboardVm: DashboardViewModel = viewModel()
     val gastoVm: GastoViewModel         = viewModel()
 
@@ -64,7 +77,7 @@ fun FinanzasNavGraph() {
             modifier         = Modifier.padding(padding)
         ) {
             composable(Screen.Dashboard.route) {
-                DashboardScreen(vm = dashboardVm)
+                DashboardScreen(vm = dashboardVm, onLogout = { authVm.logout() })
             }
             composable(Screen.Agregar.route) {
                 AgregarGastoScreen(

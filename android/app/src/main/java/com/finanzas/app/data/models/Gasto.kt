@@ -12,6 +12,9 @@ data class Gasto(
     val descripcion: String? = null,
     val fecha: String = "",
     val fuente: String = "manual",
+    val tipo: String = "personal",
+    @SerialName("user_id")
+    val userId: String? = null,
     @SerialName("yape_destinatario")
     val yapeDestinatario: String? = null,
     @SerialName("created_at")
@@ -27,20 +30,24 @@ data class GastoConCategoria(
     val descripcion: String? = null,
     val fecha: String = "",
     val fuente: String = "manual",
+    val tipo: String = "personal",
+    @SerialName("user_id")
+    val userId: String? = null,
     @SerialName("yape_destinatario")
     val yapeDestinatario: String? = null,
     @SerialName("created_at")
     val createdAt: String = "",
-    val categorias: Categoria? = null
+    val categorias: Categoria? = null,
+    val profiles: Perfil? = null
 ) {
     val nombreCategoria get() = categorias?.nombre ?: "Sin categoría"
-    val colorCategoria get() = categorias?.color ?: "#607D8B"
+    val colorCategoria  get() = categorias?.color  ?: "#607D8B"
+    val esCompartido    get() = tipo == "compartido"
+    val autor           get() = profiles?.nombre
 }
 
 @Serializable
-data class ResumenCategoria(
-    val categoria: String,
-    val color: String,
-    val total: Double,
-    val cantidad: Int
+data class Perfil(
+    val id: String = "",
+    val nombre: String = ""
 )
